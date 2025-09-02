@@ -1,3 +1,7 @@
 export default function Home() {
-  return <div>Home Page</div>;
+  return (
+    <div>
+      <div className="spinner">hi</div>
+    </div>
+  );
 }
