@@ -3,9 +3,9 @@ export const metadata = {
 };
 function Page() {
   return (
-    <div>
-      <h1>Account</h1>
-    </div>
+    <h2 className="font-semibold text-accent-400 text-2xl mb-7">
+      Welcome , Shahoud
+    </h2>
   );
 }
 
