@@ -1,4 +1,5 @@
 import { eachDayOfInterval } from "date-fns";
+import supabase from "./supabase";
 
 //Get
 export async function getCabin(id) {
