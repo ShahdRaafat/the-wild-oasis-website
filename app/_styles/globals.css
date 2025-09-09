@@ -54,9 +54,23 @@
 }
 
 /* For data picker */
-.rdp {
-  --rdp-cell-size: 32px !important;
+.rdp-root {
+  --rdp-day-height: 32px !important;
+  --rdp-day-width: 32px !important;
+  --rdp-day_button-height: 32px !important;
+  --rdp-day_button-width: 32px !important;
+
+  -rdp-nav_button-height: 20px;
+  --rdp-nav_button-width: 20px;
+  --rdp-nav-height: 20px;
+  --rdp-nav-width: 20px;
+
   --rdp-accent-color: theme("--color-accent-500") !important;
-  --rdp-background-color: theme("--color-accent-600") !important;
+  --rdp-accent-background-color: theme("--color-accent-500") !important;
+  --rdp-range_middle-color: theme("--color-accent-50") !important;
   margin: 0 !important;
+}
+.rdp-nav {
+  top: -37px !important;
+  right: -15px !important;
 }
