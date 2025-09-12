@@ -1,9 +1,8 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { auth } from "@/app/_lib/auth";
 import Image from "next/image";
-function Navigation({ session }) {
+function NavigationClient({ session }) {
   const pathname = usePathname();
   return (
     <nav className="text-xl z-10">
@@ -63,4 +62,4 @@ function Navigation({ session }) {
   );
 }
 
-export default Navigation;
+export default NavigationClient;
