@@ -5,16 +5,7 @@ import { getBooking, getCabin } from "@/app/_lib/data-services";
 export default async function Page({ params }) {
   const { reservationId } = await params;
 
-  const {
-    startDate,
-    endDate,
-    numNights,
-    numGuests,
-    cabinPrice,
-    extrasPrice,
-    observations,
-    cabinId,
-  } = await getBooking(reservationId);
+  const { numGuests, observations, cabinId } = await getBooking(reservationId);
 
   const updateBookingWithId = updateBooking.bind(null, reservationId);
 

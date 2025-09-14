@@ -4,7 +4,7 @@ import { deleteBooking } from "../_lib/actions";
 import { useState, useTransition } from "react";
 import ConfirmDelete from "./ConfirmDelete";
 
-function DeleteReservation({ bookingId }) {
+function DeleteReservation({ bookingId, onDelete }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
 
@@ -19,8 +19,8 @@ function DeleteReservation({ bookingId }) {
   const handleConfirmDelete = () => {
     startTransition(async () => {
       try {
-        await deleteBooking(bookingId);
         setIsModalOpen(false);
+        await onDelete(bookingId);
       } catch (error) {
         console.error("Delete error:", error);
       }
