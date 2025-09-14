@@ -4,6 +4,39 @@ import { revalidatePath } from "next/cache";
 import { auth, signIn, signOut } from "./auth";
 import supabase from "./supabase";
 import { getBookings } from "./data-services";
+import { redirect } from "next/navigation";
+
+export async function updateBooking(reservationId, formData) {
+  const session = await auth();
+  if (!session) throw new Error("You must be logged in");
+
+  const guestBookings = await getBookings(session.user.guestId);
+  const guestBookingIds = guestBookings.map((booking) => booking.id);
+  console.log(guestBookings, "==================", guestBookingIds);
+
+  if (!guestBookingIds.includes(Number(reservationId)))
+    throw new Error("You are not allowed to update this booking");
+
+  const numGuests = Number(formData.get("numGuests"));
+  const observations = formData.get("observations");
+
+  const updatedData = { numGuests, observations };
+
+  const { error } = await supabase
+    .from("bookings")
+    .update(updatedData)
+    .eq("id", reservationId);
+
+  if (error) {
+    console.error(error);
+    throw new Error("Booking could not be updated");
+  }
+
+  revalidatePath(`/account/reservations/edit/${reservationId}`);
+  revalidatePath("/account/reservations");
+
+  redirect("/account/reservations");
+}
 
 export async function deleteBooking(bookingId) {
   const session = await auth();
