@@ -6,16 +6,20 @@ import supabase from "./supabase";
 import { getBookings } from "./data-services";
 import { redirect } from "next/navigation";
 
-export async function updateBooking(reservationId, formData) {
+//utility function
+async function authenticateAndVerifyBooking(bookingId) {
   const session = await auth();
   if (!session) throw new Error("You must be logged in");
 
   const guestBookings = await getBookings(session.user.guestId);
   const guestBookingIds = guestBookings.map((booking) => booking.id);
-  console.log(guestBookings, "==================", guestBookingIds);
 
-  if (!guestBookingIds.includes(Number(reservationId)))
+  if (!guestBookingIds.includes(Number(bookingId)))
     throw new Error("You are not allowed to update this booking");
+}
+
+export async function updateBooking(reservationId, formData) {
+  await authenticateAndVerifyBooking(reservationId);
 
   const numGuests = Number(formData.get("numGuests"));
   const observations = formData.get("observations");
@@ -39,14 +43,7 @@ export async function updateBooking(reservationId, formData) {
 }
 
 export async function deleteBooking(bookingId) {
-  const session = await auth();
-  if (!session) throw new Error("You must be logged in");
-
-  const guestBookings = await getBookings(session.user.guestId);
-  const guestBookingIds = guestBookings.map((booking) => booking.id);
-
-  if (!guestBookingIds.includes(bookingId))
-    throw new Error("You are not allowed to delete this booking");
+  await authenticateAndVerifyBooking(bookingId);
 
   const { error } = await supabase
     .from("bookings")
