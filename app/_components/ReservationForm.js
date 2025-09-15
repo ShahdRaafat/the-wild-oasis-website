@@ -1,9 +1,28 @@
 "use client";
 import { useReservation } from "../_contexts/ReservationContext";
 import Image from "next/image";
+import { createBooking } from "../_lib/actions";
+import { differenceInDays } from "date-fns";
+import SubmitButton from "./SubmitButton";
 function ReservationForm({ cabin, user }) {
-  const { maxCapacity } = cabin;
-  const { range } = useReservation();
+  const { id, maxCapacity, regularPrice, discount } = cabin;
+  const { range, resetRange } = useReservation();
+
+  const startDate = range.from;
+  const endDate = range.to;
+
+  const numNights = differenceInDays(endDate, startDate);
+  const cabinPrice = (regularPrice - discount) * numNights;
+
+  const bookingData = {
+    startDate,
+    endDate,
+    numNights,
+    cabinPrice,
+    cabinId: id,
+  };
+
+  const createBookingWithData = createBooking.bind(null, bookingData);
 
   return (
     <div>
@@ -23,7 +42,14 @@ function ReservationForm({ cabin, user }) {
         </div>
       </div>
 
-      <form className="bg-primary-900 py-10 px-16 text-lg flex gap-5 flex-col">
+      <form
+        action={async (formData) => {
+          await createBookingWithData(formData);
+          resetRange();
+          console.log(range);
+        }}
+        className="bg-primary-900 py-10 px-16 text-lg flex gap-5 flex-col"
+      >
         <div className="space-y-2">
           <label htmlFor="numGuests">How many guests?</label>
           <select
@@ -56,11 +82,13 @@ function ReservationForm({ cabin, user }) {
         </div>
 
         <div className="flex justify-end items-center gap-6">
-          <p className="text-primary-300 text-base">Start by selecting dates</p>
-
-          <button className="bg-accent-500 px-8 py-4 text-primary-800 font-semibold hover:bg-accent-600 transition-all disabled:cursor-not-allowed disabled:bg-gray-500 disabled:text-gray-300">
-            Reserve now
-          </button>
+          {!(startDate && endDate) ? (
+            <p className="text-primary-300 text-base">
+              Start by selecting dates
+            </p>
+          ) : (
+            <SubmitButton pendingLabel="Reserving...">Reserve now</SubmitButton>
+          )}
         </div>
       </form>
     </div>
