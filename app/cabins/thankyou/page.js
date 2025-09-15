@@ -1,6 +1,14 @@
+"use client";
+import { useReservation } from "@/app/_contexts/ReservationContext";
 import Link from "next/link";
+import { useEffect } from "react";
 
 export default function Page() {
+  const { resetRange } = useReservation();
+
+  useEffect(() => {
+    resetRange(); // Clear dates when user reaches thank you page
+  }, [resetRange]);
   return (
     <div className="text-center space-y-6 mt-4">
       <h1 className="text-3xl font-semibold">
