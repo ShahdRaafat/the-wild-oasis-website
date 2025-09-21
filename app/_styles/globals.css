@@ -71,6 +71,10 @@
   margin: 0 !important;
 }
 .rdp-nav {
-  top: -37px !important;
-  right: -15px !important;
+  top: -50px !important;
+  right: 50% !important;
+  transform: translateX(50%);
+}
+.rdp-months {
+  justify-content: center;
 }
