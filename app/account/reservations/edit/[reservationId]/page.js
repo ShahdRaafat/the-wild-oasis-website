@@ -13,21 +13,23 @@ export default async function Page({ params }) {
 
   return (
     <div>
-      <h2 className="font-semibold text-2xl text-accent-400 mb-7">
+      <h2 className="font-semibold text-xl sm:text-2xl text-accent-400 mb-4 sm:mb-7">
         Edit Reservation #{reservationId}
       </h2>
 
       <form
         action={updateBookingWithId}
-        className="bg-primary-900 py-8 px-12 text-lg flex gap-6 flex-col"
+        className="bg-primary-900 py-6 sm:py-8 px-4 sm:px-8 lg:px-12 text-sm sm:text-base lg:text-lg flex gap-4 sm:gap-6 flex-col rounded-lg sm:rounded-none"
       >
         <div className="space-y-2">
-          <label htmlFor="numGuests">How many guests?</label>
+          <label htmlFor="numGuests" className="block font-medium">
+            How many guests?
+          </label>
           <select
             name="numGuests"
             defaultValue={numGuests}
             id="numGuests"
-            className="px-5 py-3 bg-primary-200 text-primary-800 w-full shadow-sm rounded-sm"
+            className="px-3 sm:px-5 py-3 bg-primary-200 text-primary-800 w-full shadow-sm rounded-sm text-sm sm:text-base"
             required
           >
             <option value="" key="">
@@ -42,17 +44,18 @@ export default async function Page({ params }) {
         </div>
 
         <div className="space-y-2">
-          <label htmlFor="observations">
+          <label htmlFor="observations" className="block font-medium">
             Anything we should know about your stay?
           </label>
           <textarea
             name="observations"
             defaultValue={observations || ""}
-            className="px-5 py-3 bg-primary-200 text-primary-800 w-full shadow-sm rounded-sm"
+            rows={4}
+            className="px-3 sm:px-5 py-3 bg-primary-200 text-primary-800 w-full shadow-sm rounded-sm resize-vertical min-h-[100px] text-sm sm:text-base"
           />
         </div>
 
-        <div className="flex justify-end items-center gap-6">
+        <div className="flex flex-col sm:flex-row sm:justify-end items-center gap-4 sm:gap-6 pt-2">
           <SubmitButton pendingLabel="Updating...">
             Update Reservation
           </SubmitButton>
