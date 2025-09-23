@@ -101,7 +101,7 @@ function DateSelector({ settings, cabin, bookedDates }) {
       )}
 
       {/* Booking Guidelines */}
-      <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+      <div className="mb-4 p-3 bg-blue-50 border border-blue-200 ">
         <p className="text-sm text-blue-800">
           💡 <strong>Booking Guidelines:</strong> Minimum {minBookingLength}{" "}
           {minBookingLength === 1 ? "night" : "nights"}, Maximum{" "}
