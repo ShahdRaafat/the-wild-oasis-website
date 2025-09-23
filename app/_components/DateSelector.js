@@ -9,6 +9,8 @@ import { DayPicker } from "react-day-picker";
 import "react-day-picker/style.css";
 import { useReservation } from "../_contexts/ReservationContext";
 import { useState } from "react";
+import ValidationMessage from "./ValidationMessage";
+import PriceSummary from "./ReservationSummary";
 
 function isAlreadyBooked(range, datesArr) {
   if (!range || !range.from || !range.to) {
@@ -89,37 +91,13 @@ function DateSelector({ settings, cabin, bookedDates }) {
     <div className="flex flex-col justify-between">
       {/* Validation Error Message */}
       {validationError && (
-        <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg">
-          <div className="flex items-center">
-            <div className="flex-shrink-0">
-              <svg
-                className="h-5 w-5 text-red-400"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
-                  clipRule="evenodd"
-                />
-              </svg>
-            </div>
-            <div className="ml-3">
-              <p className="text-sm text-red-800">{validationError}</p>
-            </div>
-            <div className="ml-auto">
-              <button
-                onClick={() => {
-                  setValidationError("");
-                  resetRange();
-                }}
-                className="text-red-400 hover:text-red-600"
-              >
-                <span className="sr-only">Close</span>✕
-              </button>
-            </div>
-          </div>
-        </div>
+        <ValidationMessage
+          message={validationError}
+          onClear={() => {
+            setValidationError("");
+            resetRange();
+          }}
+        />
       )}
 
       {/* Booking Guidelines */}
@@ -146,46 +124,17 @@ function DateSelector({ settings, cabin, bookedDates }) {
         }
       />
 
-      <div className="flex items-center justify-between px-8 bg-accent-500 text-primary-800 h-[72px]">
-        <div className="flex items-baseline gap-6">
-          <p className="flex gap-2 items-baseline">
-            {discount > 0 ? (
-              <>
-                <span className="text-2xl">${regularPrice - discount}</span>
-                <span className="line-through font-semibold text-primary-700">
-                  ${regularPrice}
-                </span>
-              </>
-            ) : (
-              <span className="text-2xl">${regularPrice}</span>
-            )}
-            <span className="">/night</span>
-          </p>
-          {numNights > 0 ? (
-            <>
-              <p className="bg-accent-600 px-3 py-2 text-2xl">
-                <span>&times;</span> <span>{numNights}</span>
-              </p>
-              <p>
-                <span className="text-lg font-bold uppercase">Total</span>{" "}
-                <span className="text-2xl font-semibold">${cabinPrice}</span>
-              </p>
-            </>
-          ) : null}
-        </div>
-
-        {range?.from || range?.to ? (
-          <button
-            className="border bg-primary-800 text-accent-300 py-2 px-4 text-sm font-semibold cursor-pointer hover:bg-primary-700 transition-colors"
-            onClick={() => {
-              setValidationError("");
-              resetRange();
-            }}
-          >
-            Clear
-          </button>
-        ) : null}
-      </div>
+      <PriceSummary
+        regularPrice={regularPrice}
+        discount={discount}
+        nights={numNights}
+        total={cabinPrice}
+        showClear={!!(range?.from || range?.to)}
+        onClear={() => {
+          setValidationError("");
+          resetRange();
+        }}
+      />
     </div>
   );
 }
